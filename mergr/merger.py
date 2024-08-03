@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from typing import Any, ClassVar, TypeAlias
 
 MergeFn: TypeAlias = Callable[[Any, Any], Any]
@@ -42,6 +42,11 @@ class Merger:
 
         return self.default_strategy
 
+    def merge_mapping(self, a: Mapping, b: Mapping) -> dict:
+        return {**a, **b}
+
     def merge(self, a: Any, b: Any) -> Any:
+        if isinstance(a, Mapping) and isinstance(b, Mapping):
+            return self.merge_mapping(a, b)
         strategy = self.pick_strategy(a)
         return strategy(a, b)
