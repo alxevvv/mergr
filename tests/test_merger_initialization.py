@@ -2,13 +2,7 @@ from typing import ClassVar
 
 from mergr.merger import Merger, Strategies
 
-
-def add(a, b):
-    return a + b
-
-
-def multiply(a, b):
-    return a + b
+from .merge_funcs import add, multiply
 
 
 def test_default():
@@ -54,7 +48,7 @@ def test_strategies_merging():
     class MyMerger(Merger):
         strategies: ClassVar[Strategies] = {int: add, str: add}
 
-    merger = MyMerger(strategies={int: multiply, float: multiply})
+    merger = MyMerger({int: multiply, float: multiply})
 
     assert len(merger.strategies) == 2
     assert merger.strategies[int] == add
