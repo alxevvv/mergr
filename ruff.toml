@@ -1,0 +1,64 @@
+line-length = 80
+target-version = "py310"
+fix = true
+extend-exclude = [".venv", "migrations", "static", "templates"]
+
+[format]
+quote-style = "double"
+
+[lint.flake8-type-checking]
+quote-annotations = true
+
+[lint]
+select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # flake8-type-checking
+    "TCH",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E",
+    "W",
+    # pyflakes
+    "F",
+    # pygrep-hooks
+    "PGH",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # tryceratops
+    "TRY",
+]
+fixable = ["ALL"]
+
+[lint.per-file-ignores]
+"tests/*" = [
+    # useless-expression
+    "B018",
+    # assert
+    "S101",
+    # hardcoded-password-string
+    "S105",
+    # hardcoded-password-func-arg
+    "S106",
+    # hardcoded-password-default
+    "S107",
+    # raise-vanilla-args
+    "TRY003",
+]
