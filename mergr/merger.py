@@ -14,7 +14,7 @@ class Merger:
     def __init__(
         self,
         strategies: Strategies | None = None,
-        default_strategy: MergeFn = lambda a, b: a,
+        default_strategy: MergeFn = lambda a, _: a,
     ) -> None:
         if hasattr(self.__class__, "strategies"):
             _strategies = dict(self.__class__.strategies)
@@ -27,6 +27,9 @@ class Merger:
         self._strategies = _strategies
         self.default_strategy = default_strategy
 
+    def __call__(self, a: Any, b: Any) -> Any:
+        return self.merge(a, b)
+
     def pick_strategy(self, a: Any) -> MergeFn:
         exact_type_strategy = self._strategies.get(type(a))
 
@@ -38,3 +41,7 @@ class Merger:
                     return strategy
 
         return self.default_strategy
+
+    def merge(self, a: Any, b: Any) -> Any:
+        strategy = self.pick_strategy(a)
+        return strategy(a, b)
