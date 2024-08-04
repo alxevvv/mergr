@@ -1,4 +1,4 @@
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any, ClassVar, TypeAlias
 
 MergeFn: TypeAlias = Callable[[Any, Any], Any]
@@ -42,11 +42,23 @@ class Merger:
 
         return self.default_strategy
 
-    def merge_mapping(self, a: Mapping, b: Mapping) -> dict:
+    def pick_and_merge(self, a: Any, b: Any) -> Any:
+        return self.pick_strategy(a)(a, b)
+
+    def merge_mappings(self, a: Mapping, b: Mapping) -> dict:
         return {**a, **b}
 
+    def merge_sequences(self, a: Sequence, b: Sequence) -> list:
+        return [*a, *b]
+
     def merge(self, a: Any, b: Any) -> Any:
+        if type(a) is str or type(a) is bytes:
+            return self.pick_and_merge(a, b)
+
         if isinstance(a, Mapping) and isinstance(b, Mapping):
-            return self.merge_mapping(a, b)
-        strategy = self.pick_strategy(a)
-        return strategy(a, b)
+            return self.merge_mappings(a, b)
+
+        if isinstance(a, Sequence) and isinstance(b, Sequence):
+            return self.merge_sequences(a, b)
+
+        return self.pick_and_merge(a, b)
