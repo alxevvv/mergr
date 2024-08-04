@@ -7,6 +7,11 @@ on:
 jobs:
   pypi-publish:
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/mergr
+    permissions:
+      id-token: write
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -24,11 +29,13 @@ jobs:
         id: vars
         run: echo tag=${GITHUB_REF#refs/*/} >> $GITHUB_OUTPUT
 
-      - name: Build and publish
+      - name: Build new release
         run: |
           source .venv/bin/activate
           export PDM_BUILD_SCM_VERSION=$RELEASE_VERSION
-          make build-and-publish
+          make build
         env:
-          PYPI_TOKEN: ${{ env.PYPI_TOKEN }}
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
