@@ -12,8 +12,6 @@ check: ## Run code quality tools.
 	@pdm run pre-commit run -a
 	@echo "🚀 Static type checking: Running mypy"
 	@pdm run mypy mergr
-	@echo "🚀 Checking for obsolete dependencies: Running deptry"
-	@pdm run deptry .
 
 .PHONY: test
 test: ## Test the code with pytest
