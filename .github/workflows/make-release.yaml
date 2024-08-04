@@ -1,0 +1,35 @@
+name: Build and publish a release to PyPI
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  pypi-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up the environment
+        uses: ./.github/actions/setup-pdm-env
+
+      - name: Run checks
+        run: make check
+
+      - name: Run tests
+        run: make test
+
+      - name: Export tag
+        id: vars
+        run: echo tag=${GITHUB_REF#refs/*/} >> $GITHUB_OUTPUT
+
+      - name: Build and publish
+        run: |
+          source .venv/bin/activate
+          export PDM_BUILD_SCM_VERSION=$RELEASE_VERSION
+          make build-and-publish
+        env:
+          PYPI_USERNAME: ${{ env.PYPI_USERNAME }}
+          PYPI_TOKEN: ${{ env.PYPI_TOKEN }}
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
