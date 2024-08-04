@@ -10,6 +10,7 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    environment: pypi
     steps:
       - name: Check out
         uses: actions/checkout@v4
