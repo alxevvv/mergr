@@ -62,6 +62,15 @@ def test_dataclasses_merged():
     assert dataobj_merged.nested2.nested2_prop_int == 12
 
 
+def test_dataclasses_not_merged_if_no_common_props():
+    merger = Merger()
+
+    dataobj1 = Nested1(nested1_prop_str="bar", nested1_prop_int=24)
+    dataobj2 = Nested2(nested2_prop_str="baz", nested2_prop_int=12)
+
+    assert merger.merge(dataobj1, dataobj2) == dataobj1
+
+
 def test_fallback_to_default_if_b_is_not_dataclass():
     merger = Merger()
 
