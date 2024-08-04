@@ -30,6 +30,5 @@ jobs:
           export PDM_BUILD_SCM_VERSION=$RELEASE_VERSION
           make build-and-publish
         env:
-          PYPI_USERNAME: ${{ env.PYPI_USERNAME }}
           PYPI_TOKEN: ${{ env.PYPI_TOKEN }}
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
